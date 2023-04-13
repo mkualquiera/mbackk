@@ -80,5 +80,5 @@ fn calculate_md5(path: &PathBuf) -> Result<String, io::Error> {
     hasher.consume(buffer);
 
     let result = hasher.compute();
-    Ok(format!("{:x}", result))
+    Ok(format!("{result:x}"))
 }
