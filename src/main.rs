@@ -80,7 +80,7 @@ struct Backup {
     #[arg(default_value = "true")]
     report: Option<bool>,
     /// The maximum size of each file in the backup.
-    #[arg(default_value = "536870912")]
+    #[arg(default_value = "512")]
     max_file_size: Option<u64>,
 }
 
@@ -104,7 +104,7 @@ fn main() {
         Commands::Backup(args) => backup(
             args.origin,
             args.destination,
-            args.max_file_size.unwrap(),
+            args.max_file_size.unwrap() * 1024 * 1024,
             args.report.unwrap(),
         ),
         Commands::Restore(args) => restore(args.origin, args.destination),
