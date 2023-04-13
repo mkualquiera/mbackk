@@ -44,6 +44,8 @@ impl MultipartWriter {
 impl Write for MultipartWriter {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         let size = buf.len();
+
+        // how many bytes can we write?
         let can_write = self.max_file_size - self.file_size;
         if can_write == 0 {
             self.file_number += 1;
@@ -52,8 +54,10 @@ impl Write for MultipartWriter {
             )?;
             self.file_size = 0;
             debug!("** Writing to file {}", self.file_number);
+            // Recursively call write to write the remaining bytes.
             return self.write(buf);
         }
+
         let size = std::cmp::min(size, can_write as usize);
         let buf = &buf[..size];
         self.file.write_all(buf)?;
